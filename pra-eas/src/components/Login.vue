@@ -2,9 +2,9 @@
     <div>
       <h2>Login</h2>
       <!-- Form login -->
-      <form @submit.prevent="login">
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required>
+      <form v-on:submit.prevent="login">
+        <label for="email">email:</label>
+        <input type="text" id="email" v-model="email" required>
   
         <label for="password">Password:</label>
         <input type="password" id="password" v-model="password" required>
@@ -15,29 +15,39 @@
   </template>
   
   <script>
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+
+  const router = useRouter();
+  // const email = ref("");
+  // const password = ref ("");
+
+
   export default {
     data() {
       return {
-        username: '',
-        password: ''
+        email: ref(""),
+        password: ref("")
       };
     },
     methods: {
       async login() {
         try {
-          const res = await fetch('http://localhost:3000/api/chat/login', {
+          const res = await fetch('http://localhost:3000/api/users/login', {
+            credentials: "include",
             method: 'POST',
+
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              username: this.username,
+              email: this.email,
               password: this.password,
             }),
           });
   
           const json = await res.json();
-  
+          console.log (json)
           // Check the response or handle accordingly
           if (res.ok) {
             alert('Login successful!');
